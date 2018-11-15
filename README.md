@@ -60,6 +60,8 @@ You can manually set a specified MAC address by running the command as follows:
 sudo changemac <interface> <MAC address>
 ```
 
+Note: Not all MAC addresses are valid. If you try to manually set an invalid MAC address, the script will fail and exit after 10 tries.
+
 If you mess up, the script will generally tell you where you went wrong and exit without doing anything.
 
 Enjoy!

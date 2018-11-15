@@ -1,6 +1,6 @@
 # changemac.sh
 
-A simple bash script to make changing/spoofing your MAC address easier on your OSX 10.13+ system. Inspired by macchanger. Yes, I'm reinventing the wheel in a very cludgey way.
+A simple bash script to make changing/spoofing your MAC address easier on your OSX 10.13+ system. Inspired by macchanger. Yes, I'm reinventing the wheel in a very kludgy way.
 
 Written by Phillip David Stearns 2018.
 

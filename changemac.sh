@@ -1,10 +1,11 @@
 #!/bin/bash
 
 #--------------------------------------------------------------------
-#   A simple script that demonstrates some basic bash commands to
-#   spoof a random MAC address on a specified network interface.
+#	A simple bash script to make changing/spoofing your MAC address
+#	easier on your OSX 10.13+ system. Inspired by macchanger.
+#	Yes, I'm reinventing the wheel in a very kludgy way.
 #
-#   Created by Phillip David Stearns 2018
+#	Written by Phillip David Stearns 2018.
 #
 #   Was written for OSX 10.13
 #   Dependencies: networksetup, airport, openssl

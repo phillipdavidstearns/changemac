@@ -6,7 +6,7 @@ Written by Phillip David Stearns 2018.
 
 ## Installation
 
-I recommend cloning or repository into your `/usr/local/etc` directory:
+I recommend cloning or unzipping repository into your `/usr/local/etc` directory. From the command line:
 
 ```
 cd /usr/local/etc

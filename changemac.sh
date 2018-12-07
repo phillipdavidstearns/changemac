@@ -11,15 +11,6 @@
 #   Dependencies: networksetup, airport, openssl
 #--------------------------------------------------------------------
 
-#check if running as root
-
-if [ "$EUID" -ne 0 ]
-  then
-    echo "[!] Please run as root"
-    echo "[!] Exiting"
-    exit 1
-fi
-
 #a helpful usage message
 
 function usage {
@@ -78,6 +69,14 @@ while getopts ":hrRcpm:i:vd" opt; do
 done
 shift $((OPTIND -1))
 
+#before going any further check if running as root
+
+if [ "$EUID" -ne 0 ]
+  then
+    echo "[!] changemac must be run as root"
+    exit 1
+fi
+
 #check for remaining arguments
 
 if [ $# -gt 2 ]; then
@@ -115,8 +114,7 @@ if [ ! "$MAC" = "" ]; then
   done
 fi
 
-#store the permanent MAC address of the interface
-
+#check for valid interface by retrieving its permanent MAC address
 
 function getPermMAC {
   pMAC=$(networksetup -getmacaddress $1 | grep -oE '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}')
@@ -126,9 +124,6 @@ function getPermMAC {
     return 0
   fi
 }
-
-
-#if retrieving MAC failed, exit
 
 while getPermMAC $iface; do
   echo "[>] Please specify valid a network interface"
@@ -177,12 +172,12 @@ if [ $r = true -o $R = true -o ! "$MAC" = "" -o ! "$iface" = "" -a ! $p = true -
   #if a Wi-Fi interface, turn it on if it's off
 
   if [ $wifi = true ]; then
-    if [ $airport_status = 'Off' ]; then
+    if [ "$airport_status" = "Off" ]; then
       if [ $v = true ]; then
         echo "[*] Powering on Wi-Fi interface"
       fi
       networksetup -setairportpower $iface on
-    elif [ $airport_status = 'On' ]; then
+    elif [ "$airport_status" = "On" ]; then
       if [ $v = true ]; then
         echo "[+] Wi-Fi interface is on"
       fi
@@ -190,6 +185,7 @@ if [ $r = true -o $R = true -o ! "$MAC" = "" -o ! "$iface" = "" -a ! $p = true -
 
     #detach from current AP before making changes
     #you'll have to manually reconnect afterwards
+
     if [ $v = true ]; then
       echo "[*] Dissociating from current AP"
     fi
@@ -211,8 +207,8 @@ if [ $r = true -o $R = true -o ! "$MAC" = "" -o ! "$iface" = "" -a ! $p = true -
     else
       sudo ifconfig $iface ether $MAC 2> /dev/null
     fi
-      newmac=$(ifconfig $iface ether | grep -oE '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}')
-      ((attempts++))
+    newmac=$(ifconfig $iface ether | grep -oE '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}')
+    ((attempts++))
   }
 
   #attempt to set new MAC, fail after 10 tries

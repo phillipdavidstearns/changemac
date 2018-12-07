@@ -29,18 +29,30 @@ You should then be able to run the script from anywhere using `changemac`.
 
 ## Use
 
-Always run as root (this may change).
+```
+Usage: changemac [-hcprRv] [interface] [MAC]
+NOTE: Must be run as root!
+
+	-h		display this help message
+	-c		show current MAC address
+	-p		show permanent hardware MAC address
+	-r		randomize MAC address
+	-R		reset MAC address to hardware default
+	-v		verbose output
+```
+
+Always run as root.
 
 ```
 sudo changemac
 ```
 
-If no interface argument is supplied, it'll prompt the user for one. You can use `ifconfig` to return a list of devices. Those with a MAC address are accepted and can be changed.
+If no interface argument is supplied, it'll prompt you for one. You can use `ifconfig` prior to running `changemac` to return a list of devices. Those with a MAC address are accepted and can be changed.
 
 Optionally, you can supply `changemac` with an interface argument:
 
 ```
-sudo changemac <interface>
+sudo changemac [interface]
 ```
 
 This will attempt to generate and set a random MAC address.

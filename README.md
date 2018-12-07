@@ -6,10 +6,10 @@ Written by Phillip David Stearns 2018.
 
 ## Installation
 
-I recommend cloning or repository into your `/usr/local/opt` directory:
+I recommend cloning or repository into your `/usr/local/etc` directory:
 
 ```
-cd /usr/local/opt
+cd /usr/local/etc
 git clone https://github.com/phillipdavidstearns/changemac.git
 ```
 
@@ -17,17 +17,21 @@ Make the script executable:
 
 ```
 sudo chmod +x /full/path/to/changemac.sh
+example: sudo chmod +x /usr/local/etc/changemac/changemac.sh
 ```
 
 Create a symbolic link to your executable `$PATH` like so:
 
 ```
 ln -s /full/path/to/changemac.sh /usr/local/bin/changemac
+example: ln -s /usr/local/etc/changemac/changemac.sh /usr/local/bin/changemac
 ```
 
 You should then be able to run the script from anywhere using `changemac`.
 
-## Use
+## Usage
+
+Display the usage help message by running `changemac -h`
 
 ```
 Usage: changemac [-hcprRv] [interface] [MAC]

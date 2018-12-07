@@ -27,7 +27,7 @@ ln -s /full/path/to/changemac.sh /usr/local/bin/changemac
 example: ln -s /usr/local/etc/changemac/changemac.sh /usr/local/bin/changemac
 ```
 
-You should then be able to run the script from anywhere using `changemac`.
+You should then be able to run the script from anywhere running `changemac` form the command line.
 
 ## Usage
 
@@ -45,7 +45,7 @@ NOTE: Must be run as root!
 	-v		verbose output
 ```
 
-Always run as root. The order of options and arguments is important. All options must be specified *before* supplying the `[interface]` and optional `[MAC]` arguments.
+Always run as root using `sudo` if you're not already logged in with root access. The order of options and arguments is important. All options must be specified *before* supplying the `[interface]` and optional `[MAC]` arguments.
 
 ```
 sudo changemac

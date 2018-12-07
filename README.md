@@ -41,13 +41,13 @@ NOTE: Must be run as root!
 	-v		verbose output
 ```
 
-Always run as root.
+Always run as root. The order of options and arguments is important. All options must be specified *before* supplying the `[interface]` and optional `[MAC]` arguments.
 
 ```
 sudo changemac
 ```
 
-If no interface argument is supplied, it'll prompt you for one. You can use `ifconfig` prior to running `changemac` to return a list of devices. Those with a MAC address are accepted and can be changed.
+If no interface argument is supplied, you'll be prompted for one. Use `ifconfig` prior to running `changemac` to return a list of devices. Those with a MAC address are acceptable and can be changed.
 
 Optionally, you can supply `changemac` with an interface argument:
 
@@ -55,21 +55,21 @@ Optionally, you can supply `changemac` with an interface argument:
 sudo changemac [interface]
 ```
 
-This will attempt to generate and set a random MAC address.
+This generates and attempts to set a random MAC address for the specified interface.
 
-If a Wi-Fi interface is specified, it will be powered up if off or dissociated from the current network if on and connected. You will have to reconnect to the network.
+If a Wi-Fi interface is specified, it will be powered up if off or dissociated from the current network if on and connected. You will have to reconnect manually to the network.
 
-Right now, other network interfaces are not detached, so will have to be manually placed `down` and `up` for the changes to take effect:
+After the MAC address is successfully set, the interface is brought down and up. This should reset the connection and the new MAC address settings should take effect. However, you may need to manually do this using the commands:
 
 ```
-ifconfig <interface> down
-ifconfig <interface> up
+ifconfig [interface] down
+ifconfig [interface] up
 ``` 
 
 You can manually set a specified MAC address by running the command as follows:
 
 ```
-sudo changemac <interface> <MAC address>
+sudo changemac [interface] [MAC address]
 ```
 
 Note: Not all MAC addresses are valid. If you try to manually set an invalid MAC address, the script will fail and exit after 10 tries.

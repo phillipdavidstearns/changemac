@@ -225,10 +225,27 @@ if [ $r = true -o $R = true -o ! "$MAC" = "" -o ! "$iface" = "" -a ! $p = true -
     exit 1
   fi
 
-  if [ $v = true ]; then
-    echo "[+] Last MAC: $lastmac"
+  #if not a wifi interface, force the interface down and back up to apply changes.
+
+  if [ $wifi = false ]; then
+    if [ $v = true ]; then
+      echo "[*] Bringing inface $iface down"
+    fi
+    ifconfig $iface down
+    sleep 1
+    if [ $v = true ]; then
+      echo "[*] Bringing inface $iface up"
+    fi
+    ifconfig $iface up
+    sleep 1
   fi
-    echo "[+] New MAC: $newmac"
+
+  #our results
+
+  if [ $v = true ]; then
+    echo "[+] Last used MAC: $lastmac"
+  fi
+    echo "[+] MAC set to: $newmac"
 fi
 
 exit 0

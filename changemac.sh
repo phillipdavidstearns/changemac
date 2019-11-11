@@ -38,7 +38,7 @@ MAC=""
 
 while getopts ":hrRcpm:i:vd" opt; do
   case ${opt} in
-    h) #process -h
+    h)
       usage
       exit 1
       ;;

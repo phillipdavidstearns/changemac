@@ -107,6 +107,6 @@ changemac -s [interface]
 
 OUI formats accepts are `xx:xx:xx` or `XX:XX:XX`
 
-If you also specify a MAC address, the `-s` option will override. The next update will allow you to manually set the last 3 octets and randomly select the OUI.
+If you also specify a MAC address, the `-s` option will be overridden. The next update will allow you to manually set the last 3 octets and randomly select the OUI.
 
 Enjoy!

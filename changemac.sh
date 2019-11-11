@@ -6,6 +6,7 @@
 #	Yes, I'm reinventing the wheel in a very kludgy way.
 #
 #	Written by Phillip David Stearns 2018.
+#	Last update 11/2019
 #
 #   Was written for OSX 10.13
 #   Dependencies: networksetup, airport, openssl, GNU coreutils
@@ -153,7 +154,7 @@ fi
 
 if [ "$cMAC" = "$MAC" ]
   then
-    echo "[!] Current MAC already set to: $MAC"
+    echo "[+] Current MAC already set to: $MAC"
     exit 0
 fi
 

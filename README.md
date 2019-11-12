@@ -4,41 +4,39 @@ A simple bash script to make changing/spoofing your MAC address easier on your O
 
 Written by Phillip David Stearns 2018.
 
-## Dependencies
-
-Firstly, this only has a remote chance of working on Mac OSX 10.13+
-
-You should install homebrew if you haven't already.
-
-Then install the GNU `coreutils`:
-
-```
-brew install coreutils
-```
-
-The script uses `networksetup` and `airport`. `airport` is presumed to be at the following location:
-
-```
-/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport
-```
+Last updated 11/2019
 
 ## Installation
 
-I recommend cloning or unzipping repository into your `/usr/local/src` directory. From the command line:
+Cloning or download and unzip the repository into `/usr/local/opt`. From the command line:
 
 ```
-cd /usr/local/src
+cd /usr/local/opt
 git clone https://github.com/phillipdavidstearns/changemac.git
 ```
 
-Create a symbolic link to your executable `$PATH` like so:
+### Automatic
 
-```
-ln -s /full/path/to/changemac.sh /usr/local/bin/changemac
-example: ln -s /usr/local/src/changemac/changemac.sh /usr/local/bin/changemac
-```
+There are install and uninstall scripts included that make installing the dependencies a snap. You'll need install from a user with `sudo` permissions.
 
-You should then be able to run the script from anywhere running `changemac` form the command line.
+1. `cd` into the repository directory: `cd /usr/local/opt/changemac`
+2. Run the install script: `./install.sh`
+
+You'll be prompted to install any missing dependencies:
+
+* homebrew
+* openssl
+* GNU coreutils
+
+You'll be prompted for your password when creating symlinks for the built in OSX tool `airport` and `changemac`.
+
+### Manual
+
+1. Install homebrew: `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+2. Install required packages: `brew install openssl coreutils`
+3. Create a symbolic link: `ln -s /usr/local/opt/changemac/changemac.sh /usr/local/bin/changemac`
+
+You should then be able to run the script from anywhere running `changemac` from the command line or in your scripts.
 
 ## Usage
 
@@ -108,5 +106,16 @@ changemac -s [interface]
 OUI formats accepts are `xx:xx:xx` or `XX:XX:XX`
 
 If you also specify a MAC address, the `-s` option will be overridden. The next update will allow you to manually set the last 3 octets and randomly select the OUI.
+
+## Unistall
+
+1. Change to the directory where changemac.sh is located: `cd /usr/local/opt/changemac`
+2. Run the uninstall script: `./uninstall.sh`
+
+You'll be promted to remove the following:
+
+* `changemac` symlink
+* GNU coreutils
+* The repository directory and all its contents
 
 Enjoy!

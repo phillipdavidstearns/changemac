@@ -3,6 +3,7 @@
 # 1. Checks for airport, networksetup, homebrew, openssl, GNU coreutils
 # 2. Installs missing dependencies where possible
 # 3. Creates a symlink at /usr/local/bin by default or path supplied at $1
+# 4. Creates a symlink at /usr/local/share/changemac/apple.lst
 
 function is_changemac_installed {
 	if [[ $(which changemac &>/dev/null; echo $?) == 0 ]]; then
@@ -15,13 +16,13 @@ function is_changemac_installed {
 
 is_changemac_installed
 
-echo "[*] Installing changemac."
-
 #-----------------------check if running from the install.sh directory-------------------------
 
 if [[ ! -f $PWD/changemac.sh ]]; then
 	echo "[!] cd to the directory where this installation script is located and try again."
 	exit 1
+else
+	echo "[*] Installing changemac."
 fi
 
 #-----------------------setting the symlink path-------------------------
@@ -168,7 +169,7 @@ function create_symlink {
 	if [[ -L $LINK_PATH ]]; then
 		echo "[*] changemac exists at $LINK_PATH"
 	else
-		echo "[*] Creating symlink at $LINK_PATH"
+		echo "[*] Creating symlink at $LINK_PATH. Please enter your password if prompted."
 		sudo ln -s $PWD/changemac.sh $LINK_PATH
 		if [[ $? == 0 ]]; then
 			echo "[+] Created symlink at $LINK_PATH"
@@ -185,7 +186,7 @@ if [[ -x $PWD/changemac.sh ]]; then
 	create_symlink
 else
 	echo "[*] Making changemac.sh executable."
-	sudo chmod +x $PWD/changemac.sh
+	chmod +x $PWD/changemac.sh
 	if [[ $? == 0 ]]; then
 		create_symlink
 	else

@@ -9,6 +9,8 @@
 if [[ ! -f $PWD/changemac.sh ]]; then
 	echo "[!] cd to the directory where this uninstall script is located and try again."
 	exit 1
+else
+	echo "[*] Uninstalling changemac."
 fi
 
 #-----------------------Remove changemac symlink-------------------------

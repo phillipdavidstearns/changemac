@@ -59,7 +59,7 @@ echo "[*] Checking dependencies"
 
 # echo "[?] Is \`airport\` installed?"
 
-if [[ $(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport > /dev/null 2&>1; echo $?) == 0 ]]; then
+if [[ -x /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport ]]; then
 	echo "[+] \`airport\` found at /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
 	# echo "[*] Checking whether \`airport\` is symlinked."
 	if [[ $(which airport &>/dev/null; echo $?) == 0 ]]; then

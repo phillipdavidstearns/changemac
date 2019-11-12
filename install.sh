@@ -1,0 +1,206 @@
+#!/bin/bash
+
+# 1. Checks for airport, networksetup, homebrew, openssl, GNU coreutils
+# 2. Installs missing dependencies where possible
+# 3. Creates a symlink at /usr/local/bin by default or path supplied at $1
+
+function is_changemac_installed {
+	if [[ $(which changemac &>/dev/null; echo $?) == 0 ]]; then
+		echo "[+] changemac installed at $(which changemac). Run changemac -h for usage."
+		exit 0
+	else
+		return 1
+	fi
+}
+
+is_changemac_installed
+
+echo "[*] Installing changemac."
+
+#-----------------------check if running from the install.sh directory-------------------------
+
+if [[ ! -f $PWD/changemac.sh ]]; then
+	echo "[!] cd to the directory where this installation script is located and try again."
+	exit 1
+fi
+
+#-----------------------setting the symlink path-------------------------
+
+LINK_PATH=""
+
+function set_link_path {
+	echo "[+] changemac will be symlinked at /usr/local/bin/changemac"
+	LINK_PATH="/usr/local/bin/changemac"
+}
+
+case $# in
+	0)
+		set_link_path
+		;;
+	1)
+		if [[ -d $1 ]];then
+			echo "[+] changemac will be symlinked at $1/changemac. Make sure it's in your \$PATH."
+			LINK_PATH="$1/changemac"
+		else
+			echo "[!] $1 is not a valid directory."
+			set_link_path
+		fi	
+		;;
+	\?)
+		echo "[!] Too many arguments supplied"
+		exit 1
+		;;
+esac
+
+#-----------------------Check/Install Dependencies-------------------------
+
+echo "[*] Checking dependencies"
+
+# echo "[?] Is \`airport\` installed?"
+
+if [[ $(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport > /dev/null 2&>1; echo $?) == 0 ]]; then
+	echo "[+] \`airport\` found at /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
+	# echo "[*] Checking whether \`airport\` is symlinked."
+	if [[ $(which airport &>/dev/null; echo $?) == 0 ]]; then
+		echo "[+] \`airport\` symlink found at $(which airport)"
+	else
+		echo "[*] Creating symlink to \`airport\` in /usr/local/bin, please enter your password if prompted."
+		sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/local/bin/airport
+	fi
+else
+	echo "[!] \`airport\` not found at /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
+	exit 1
+fi
+
+# echo "[?] Is \`networksetup\` installed?"
+
+if [[ $(which networksetup &>/dev/null; echo $?) == 0 ]]; then
+	echo "[+] \`networksetup\` found at $(which networksetup)"
+else
+	echo "[!] \`networksetup\` not found."
+	exit 1
+fi
+
+# echo "[?] Is homebrew installed?"
+
+if [[ $(which brew &>/dev/null; echo $?) == 0 ]]; then
+	echo "[+] homebrew symlink found at $(which brew)"
+else
+	while true; do
+	    read -p "[>] Homebrew is required to complete the installation. Do you wish to install? (y/n): " choice
+	    case $choice in
+	        [Yy]* )
+				echo "[*] Installing homebrew with /usr/bin/ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)\""
+				/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+				break
+				;;
+	        [Nn]* )
+				exit 0
+				;;
+	        * ) echo "Please enter y or n";;
+	    esac
+	done
+	if [[ $(which brew &>/dev/null; echo $?) == 0 ]];then
+		echo "[+] Successfully installed homebrew."
+	else
+    	echo "[!] Installation of homebrew failed!"
+    	exit 1
+    fi
+fi
+
+# is openssl installed?
+
+if [[ $(brew list | grep openssl &>/dev/null; echo $?) == 0 ]]; then
+	echo "[+] openssl already installed."
+else
+	while true; do
+	    read -p "[>] openssl is required. Do you wish to install openssl? (y/n): " choice
+	    case $choice in
+	        [Yy]* )
+				echo "[*] Installing openssl with \`brew install openssl\`"
+				brew install openssl
+				break
+				;;
+	        [Nn]* )
+				exit 0
+				;;
+	        * ) echo "Please enter y or n";;
+	    esac
+	done
+	if [[ $(brew list | grep openssl &>/dev/null; echo $?) == 0 ]];then
+		echo "[+] Successfully installed openssl."
+	else
+    	echo "[!] Installation of openssl failed!"
+    	exit 1
+    fi
+fi
+
+# are GNU coreutils installed?
+
+if [[ $(brew list | grep coreutils &>/dev/null; echo $?) == 0 ]]; then
+	echo "[+] coreutils already installed."
+else
+	while true; do
+	    read -p "[>] GNU coreutils are required. Do you wish to install GNU coreutils? (y/n): " choice
+	    case $choice in
+	        [Yy]* )
+				echo "[*] Installing GNU coreutils with \`brew install coreutils\`"
+				brew install coreutils
+				break
+				;;
+	        [Nn]* )
+				exit 0
+				;;
+	        * ) echo "[>] Please enter y or n";;
+	    esac
+	done
+	if [[ $(brew list | grep coreutils &>/dev/null; echo $?) == 0 ]];then
+		echo "[+] Successfully installed coreutils."
+	else
+    	echo "[!] Installation of coreutils failed!"
+    	exit 1
+    fi
+fi
+
+#-----------------------Create Symlink-------------------------
+
+function create_symlink {
+	if [[ -L $LINK_PATH ]]; then
+		echo "[*] changemac exists at $LINK_PATH"
+	else
+		echo "[*] Creating symlink at $LINK_PATH"
+		sudo ln -s $PWD/changemac.sh $LINK_PATH
+		if [[ $? == 0 ]]; then
+			echo "[+] Created symlink at $LINK_PATH"
+		else
+			echo "[!] Failed to create symlink at $LINK_PATH"
+			exit 1
+		fi
+	fi
+}
+
+# check if changemac is executable
+
+if [[ -x $PWD/changemac.sh ]]; then
+	create_symlink
+else
+	echo "[*] Making changemac.sh executable."
+	sudo chmod +x $PWD/changemac.sh
+	if [[ $? == 0 ]]; then
+		create_symlink
+	else
+		echo "[!] Failed to make changemac.sh executable"
+		exit 1
+	fi
+fi
+
+is_changemac_installed
+
+if [[ $? != 0 ]]; then
+	echo "[!] changemac failed to install."
+	exit 1
+fi
+
+echo "we should never see this..."
+
+exit 0

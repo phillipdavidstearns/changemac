@@ -191,7 +191,7 @@ if [ $r = true -o $R = true -o ! "$MAC" = "" -o ! "$iface" = "" -a ! $p = true -
 		if [ $v = true ]; then
 			echo "[*] Dissociating from current AP"
 		fi
-		sudo /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -z
+		sudo airport -z
 #if not a wifi interface, force the interface down and back up to apply changes.
 	else if [ $wifi = false ]; then
 		if [ $v = true ]; then

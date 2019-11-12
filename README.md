@@ -17,7 +17,7 @@ git clone https://github.com/phillipdavidstearns/changemac.git
 
 ### Automatic
 
-There are install and uninstall scripts included that make installing the dependencies a snap. You'll need install from a user with `sudo` permissions.
+There are install and uninstall scripts included to make installing the dependencies a snap. You'll need install from a user with `sudo` permissions.
 
 1. `cd` into the repository directory: `cd /usr/local/opt/changemac`
 2. Run the install script: `./install.sh`

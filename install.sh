@@ -138,7 +138,7 @@ else
     fi
 fi
 
-# are GNU coreutils installed?-------------------------
+#-----------------------Are GNU coreutils installed?-------------------------
 
 if [[ $(brew list | grep coreutils 2>/dev/null) ]]; then
 	echo "[+] coreutils already installed."
@@ -182,7 +182,7 @@ function create_symlink {
 	fi
 }
 
-# check if changemac is executable
+#-----------------------Is changemac.sh is executable?-------------------------
 
 if [[ -x $PWD/changemac.sh ]]; then
 	create_symlink
@@ -203,6 +203,8 @@ if [[ $? != 0 ]]; then
 	echo "[!] changemac failed to install."
 	exit 1
 fi
+
+#-----------------------THE END-------------------------
 
 echo "we should never see this..."
 

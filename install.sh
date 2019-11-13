@@ -60,25 +60,25 @@ echo "[*] Checking dependencies"
 # echo "[?] Is \`airport\` installed?"
 
 if [[ -x /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport ]]; then
-	echo "[+] \`airport\` found at /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
+	echo "[+] airport found at /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
 	# echo "[*] Checking whether \`airport\` is symlinked."
 	if [[ $(which airport &>/dev/null; echo $?) == 0 ]]; then
-		echo "[+] \`airport\` symlink found at $(which airport)"
+		echo "[+] airport symlink found at $(which airport)"
 	else
 		echo "[*] Creating symlink to \`airport\` in /usr/local/bin, please enter your password if prompted."
 		sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/local/bin/airport
 	fi
 else
-	echo "[!] \`airport\` not found at /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
+	echo "[!] airport not found at /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
 	exit 1
 fi
 
 # echo "[?] Is \`networksetup\` installed?"
 
 if [[ $(which networksetup &>/dev/null; echo $?) == 0 ]]; then
-	echo "[+] \`networksetup\` found at $(which networksetup)"
+	echo "[+] networksetup found at $(which networksetup)"
 else
-	echo "[!] \`networksetup\` not found."
+	echo "[!] networksetup not found."
 	exit 1
 fi
 

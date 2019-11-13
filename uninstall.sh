@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 1. Removes symlinks to changemac
+# 1. Prompts user whether to remove changemac symlink
 # 2. Prompts user whether to remove coreutils
 # 3. Prompts user whether to remove repository
 
@@ -17,20 +17,8 @@ fi
 
 LINK_PATH=$(which changemac)
 
-function is_changemac_symlinked {
-	if [[ -L $LINK_PATH ]]; then
-		echo "[+] changemac symlinked at $LINK_PATH."
-		return 0
-	else
-		echo "[!] changemac symlink not found."
-		return 1
-	fi
-}
-
-is_changemac_symlinked
-
-if [[ $? == 0 ]]; then
-
+if [[ -L $LINK_PATH ]]; then
+	echo "[+] changemac symlinked at $LINK_PATH."
 	while true; do
 	    read -p "[>] Do you wish to uninstall changemac? (y/n): " choice
 	    case $choice in
@@ -47,6 +35,8 @@ if [[ $? == 0 ]]; then
 	        * ) echo "Please enter y or n";;
 	    esac
 	done
+else
+	echo "[!] changemac symlink not found."
 fi
 
 #-----------------------Uninstall GNU coreutils-------------------------
@@ -54,7 +44,6 @@ fi
 # are GNU coreutils installed?
 
 if [[ $(brew list | grep coreutils &>/dev/null; echo $?) == 0 ]]; then
-
 	while true; do
 	    read -p "[>] Do you wish to uninstall GNU coreutils? (y/n): " choice
 	    case $choice in
@@ -89,6 +78,11 @@ if [[ -f $PWD/changemac.sh && ! $PWD == "/" ]]; then
 	        [Yy]* )
 				echo "[*] Removing $PWD"
 				rm -rf $PWD
+				if [[ -d $PWD ]];then
+					echo "[!] Failed to remove $PWD"
+				else
+					echo "[+] Successfully removed $PWD"
+				fi
 				break
 				;;
 	        [Nn]* )
@@ -98,13 +92,6 @@ if [[ -f $PWD/changemac.sh && ! $PWD == "/" ]]; then
 	        * ) echo "Please enter y or n";;
 	    esac
 	done
-
-	if [[ -d $PWD ]];then
-		echo "[!] Failed to remove $PWD"
-	else
-    	echo "[+] Successfully removed $PWD"
-    fi
-
 else
 	echo "[!] $PWD not removed."
 fi

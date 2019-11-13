@@ -43,14 +43,14 @@ fi
 
 # are GNU coreutils installed?
 
-if [[ $(brew list | grep coreutils &>/dev/null; echo $?) == 0 ]]; then
+if [[ $(brew list | grep coreutils 2>/dev/null) ]]; then
 	while true; do
 	    read -p "[>] Do you wish to uninstall GNU coreutils? (y/n): " choice
 	    case $choice in
 	        [Yy]* )
 				echo "[*] Uninstalling GNU coreutils with \`brew uninstall coreutils\`"
 				brew uninstall coreutils
-				if [[ ! $(brew list | grep coreutils &>/dev/null; echo $?) == 0 ]];then
+				if [[ ! $(brew list | grep coreutils 2>/dev/null) ]];then
 					echo "[+] Successfully uninstalled GNU coreutils."
 				else
 			    	echo "[!] Failed to uninstall GNU coreutils."

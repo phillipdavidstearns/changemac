@@ -6,7 +6,7 @@
 # 4. Creates a symlink at /usr/local/share/changemac/apple.lst
 
 function is_changemac_installed {
-	if [[ $(which changemac &>/dev/null; echo $?) == 0 ]]; then
+	if [[ $(which changemac 2>/dev/null) ]]; then
 		echo "[+] changemac installed at $(which changemac). Run changemac -h for usage."
 		exit 0
 	else
@@ -47,7 +47,7 @@ case $# in
 			set_link_path
 		fi	
 		;;
-	\?)
+	*)
 		echo "[!] Too many arguments supplied"
 		exit 1
 		;;
@@ -57,34 +57,36 @@ esac
 
 echo "[*] Checking dependencies"
 
-# echo "[?] Is \`airport\` installed?"
+AIRPORT_PATH="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
 
-if [[ -x /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport ]]; then
-	echo "[+] airport found at /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
-	# echo "[*] Checking whether \`airport\` is symlinked."
-	if [[ $(which airport &>/dev/null; echo $?) == 0 ]]; then
+#-----------------------Is airport installed?-------------------------
+
+if [[ -x "$AIRPORT_PATH" ]]; then
+	echo "[+] airport found at $AIRPORT_PATH"
+	# Check whether airport is symlinked."
+	if [[ $(which airport 2>/dev/null) ]]; then
 		echo "[+] airport symlink found at $(which airport)"
 	else
-		echo "[*] Creating symlink to \`airport\` in /usr/local/bin, please enter your password if prompted."
-		sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/local/bin/airport
+		echo "[*] Creating symlink to airport in /usr/local/bin, please enter your password if prompted."
+		sudo ln -s "$AIRPORT_PATH" "/usr/local/bin/airport"
 	fi
 else
-	echo "[!] airport not found at /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
+	echo "[!] airport not found at $AIRPORT_PATH"
 	exit 1
 fi
 
-# echo "[?] Is \`networksetup\` installed?"
+#-----------------------Is networksetup installed?-------------------------
 
-if [[ $(which networksetup &>/dev/null; echo $?) == 0 ]]; then
+if [[ $(which networksetup 2>/dev/null) ]]; then
 	echo "[+] networksetup found at $(which networksetup)"
 else
 	echo "[!] networksetup not found."
 	exit 1
 fi
 
-# echo "[?] Is homebrew installed?"
+#-----------------------Is homebrew installed?-------------------------
 
-if [[ $(which brew &>/dev/null; echo $?) == 0 ]]; then
+if [[ $(which brew 2>/dev/null) ]]; then
 	echo "[+] homebrew symlink found at $(which brew)"
 else
 	while true; do
@@ -101,7 +103,7 @@ else
 	        * ) echo "Please enter y or n";;
 	    esac
 	done
-	if [[ $(which brew &>/dev/null; echo $?) == 0 ]];then
+	if [[ $(which brew 2>/dev/null; echo $?) == 0 ]];then
 		echo "[+] Successfully installed homebrew."
 	else
     	echo "[!] Installation of homebrew failed!"
@@ -109,9 +111,9 @@ else
     fi
 fi
 
-# is openssl installed?
+#-----------------------Is openssl installed-------------------------
 
-if [[ $(brew list | grep openssl &>/dev/null; echo $?) == 0 ]]; then
+if [[ $(brew list | grep openssl 2>/dev/null) ]]; then
 	echo "[+] openssl already installed."
 else
 	while true; do
@@ -128,7 +130,7 @@ else
 	        * ) echo "Please enter y or n";;
 	    esac
 	done
-	if [[ $(brew list | grep openssl &>/dev/null; echo $?) == 0 ]];then
+	if [[ $(brew list | grep openssl 2>/dev/null) ]];then
 		echo "[+] Successfully installed openssl."
 	else
     	echo "[!] Installation of openssl failed!"
@@ -136,9 +138,9 @@ else
     fi
 fi
 
-# are GNU coreutils installed?
+# are GNU coreutils installed?-------------------------
 
-if [[ $(brew list | grep coreutils &>/dev/null; echo $?) == 0 ]]; then
+if [[ $(brew list | grep coreutils 2>/dev/null) ]]; then
 	echo "[+] coreutils already installed."
 else
 	while true; do
@@ -155,7 +157,7 @@ else
 	        * ) echo "[>] Please enter y or n";;
 	    esac
 	done
-	if [[ $(brew list | grep coreutils &>/dev/null; echo $?) == 0 ]];then
+	if [[ $(brew list | grep coreutils 2>/dev/null) ]];then
 		echo "[+] Successfully installed coreutils."
 	else
     	echo "[!] Installation of coreutils failed!"

@@ -82,6 +82,7 @@ if [[ -f $PWD/changemac.sh && ! $PWD == "/" ]]; then
 					echo "[!] Failed to remove $PWD"
 				else
 					echo "[+] Successfully removed $PWD"
+					cd ..
 				fi
 				break
 				;;

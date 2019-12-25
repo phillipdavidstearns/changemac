@@ -78,10 +78,16 @@ while getopts ":hrRcpm:i:s:vd" opt; do
 				echo "[!] Spoof list at $slist not found"
 				exit 1
 			else
-				OUI=$(shuf -n 1 $slist)
-				if [[ ! $OUI =~ ([[:xdigit:]]{1,2}:){2}[[:xdigit:]] ]]; then
-					echo "[!] $slist did not return a valid OUI"
-					exit 1
+				shuf_path=$(which shuf)
+				if [[ $? == 0 ]]; then
+					OUI=$(${shuf_path} -n 1 $slist)
+					if [[ ! $OUI =~ ([[:xdigit:]]{1,2}:){2}[[:xdigit:]] ]]; then
+						echo "[!] $slist did not return a valid OUI"
+						exit 1
+					fi
+					else
+						echo "[!] Could not locate shuf."
+						exit 1
 				fi
 			fi
 			;;
